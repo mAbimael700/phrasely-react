@@ -1,10 +1,9 @@
-
-import { LazyLoadImage } from 'react-lazy-load-image-component';
-import HeaderImg from '@/assets/medium-shot-happy-young-people-partying (1).webp'
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import HeaderImg from "@/assets/medium-shot-happy-young-people-partying (1).webp";
 import { NavigationMenuHome } from "@/components/home/navbar";
 import { DialogQuestion } from '@/components/quizz/dialog-question';
 
-const Image = LazyLoadImage
+const Image = LazyLoadImage;
 
 export const Index = () => {
     return (
