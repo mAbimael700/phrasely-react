@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { persistStore, persistReducer, PersistConfig } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import rootReducer from './store/rootReducer';
+import rootReducer from './slices/rootReducer';
 //import { ThunkAction, Action } from '@reduxjs/toolkit';
 
 const persistConfig: PersistConfig<ReturnType<typeof rootReducer>> = {

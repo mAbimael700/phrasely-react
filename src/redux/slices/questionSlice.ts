@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Question, QuestionState } from '../types/questionTypes';
+import { Question, QuestionState } from '@/types/questionType';
 
 const initialState: QuestionState = {
     questions: [],
@@ -7,7 +7,7 @@ const initialState: QuestionState = {
 };
 
 const questionSlice = createSlice({
-    name: 'questions',
+    name: 'question',
     initialState,
     reducers: {
         // Buscar una pregunta especifica
