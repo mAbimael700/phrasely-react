@@ -6,7 +6,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { Question } from "@/types/types"
+
 import { Button } from "../ui/button"
 
 /* interface DialogQuestionsProps {
@@ -15,7 +15,7 @@ import { Button } from "../ui/button"
 
 
 
-export const DialogQuestion = () => {
+export const DialogQuestion = ({}) => {
     return (
         <Dialog>
             <DialogTrigger>Open</DialogTrigger>
