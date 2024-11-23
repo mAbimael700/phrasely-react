@@ -11,20 +11,32 @@ const sentenceSlice = createSlice({
     name: 'sentence',
     initialState,
     reducers: {
+        // Añadir tema
         addTopic(state, action: PayloadAction<string>) {
             state.topic = action.payload; 
         },
-        // Añadir pregunta
+        // Restablecer tema al estado inicial
+        resetTopic(state) {
+            state.topic = initialState.topic; 
+        },
+        // Añadir oración
         addSentence(state, action: PayloadAction<Sentence>) {
             state.sentences.push(action.payload);
         },
-        // Siguiente pregunta
+        // Eliminar oración
+        removeSentence(state, action: PayloadAction<number>) {
+            const index = action.payload;
+            if (index >= 0 && index < state.sentences.length) {
+                state.sentences.splice(index, 1); 
+            }
+        },
+        // Siguiente oración
         next(state) {
             if (state.current < state.sentences.length - 1) {
                 state.current += 1;
             }
         },
-        // Pregunta anterior
+        // Oración anterior
         prev(state) {
             if (state.current > 0) {
                 state.current -= 1;
@@ -37,5 +49,5 @@ const sentenceSlice = createSlice({
     },
 });
 
-export const { addSentence, next, prev, reset } = sentenceSlice.actions;
+export const { addTopic, resetTopic, addSentence, removeSentence, next, prev, reset } = sentenceSlice.actions;
 export default sentenceSlice.reducer;
