@@ -8,7 +8,7 @@ const initialState: QuestionState = {
 };
 
 const questionSlice = createSlice({
-    name: 'sentence',
+    name: 'question',
     initialState,
     reducers: {
         // Añadir tema
@@ -20,11 +20,8 @@ const questionSlice = createSlice({
             state.topic = initialState.topic; 
         },
         // Añadir pregunta
-        addQuestion(state, action: PayloadAction<Question>) {
-            if (!state.questions) {
-                state.questions = [];
-            }
-            state.questions.push(action.payload);
+        addQuestion(state, action: PayloadAction<Question[]>) {
+            state.questions = action.payload;
         },
         // Eliminar pregunta
         removeQuestion(state, action: PayloadAction<number>) {
