@@ -1,7 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { addQuestion, addTopic } from "@/redux/slices/questionSlice"
+import { useQuestion } from "@/hooks/useQuestion";
 import { FormProvider, useForm } from "react-hook-form";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { z } from "zod"
@@ -36,6 +36,7 @@ export const formSchema = z.object({
 export const QuestionFormProvider = () => {
 
 
+    const { handleNewQuestion, registerTopicSentence } = useQuestion()
     const { pathname } = useLocation()
     const goTo = useNavigate();
 
@@ -53,27 +54,22 @@ export const QuestionFormProvider = () => {
         },
     })
 
-    // Desestructurar métodos del formulario
-    const { trigger } = form;
-
     // 2. Define a submit handler.
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
 
-        // Procede si no hay errores
-        console.log(values);
-
-        addTopic(values.title)
+        //addTopic(values.title)
         const questions = values.questions.map(q => {
             const question: Question = {
                 id: crypto.randomUUID(),
-                correct: q.correct_answer,
                 label: q.question,
-                options: q.answers
+                options: q.answers,
+                correct: q.correct_answer,
             }
             return question
         })
 
-        addQuestion(questions)
+        registerTopicSentence(values.title)
+        handleNewQuestion(questions)
 
         toast({
             title: "Questions added succesfully"
