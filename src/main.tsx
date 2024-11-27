@@ -7,12 +7,14 @@ import { routerMerger } from '@/lib/router-merger'
 import { IndexRoutes } from '@/routes/index-routes'
 import { DashboardFormRoutes } from '@/routes/dashboard-forms-routes'
 import { SentenceRoutes } from './routes/senteces-routes';
+import { AuthRoutes } from '@/routes/auth-routes.tsx';
+import { ConsoleRoutes } from '@/routes/console-routes.tsx';
 
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { store, persistor } from './redux/store.ts'; 
 
-const routes = routerMerger(IndexRoutes, DashboardFormRoutes, SentenceRoutes)
+const routes = routerMerger(IndexRoutes, DashboardFormRoutes, SentenceRoutes, AuthRoutes, ConsoleRoutes)
 
 const router = createBrowserRouter(routes)
 

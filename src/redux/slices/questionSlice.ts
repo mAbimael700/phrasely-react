@@ -21,6 +21,9 @@ const questionSlice = createSlice({
         },
         // Añadir pregunta
         addQuestion(state, action: PayloadAction<Question>) {
+            if (!state.questions) {
+                state.questions = [];
+            }
             state.questions.push(action.payload);
         },
         // Eliminar pregunta

@@ -1,8 +1,8 @@
 
-export const GameConsole = () => {
+export const QuestionPage = () => {
     return (
         <div className="bg">
-
+            
         </div>
     )
 };

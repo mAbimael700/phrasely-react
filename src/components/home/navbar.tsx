@@ -21,7 +21,7 @@ export function NavigationMenuHome() {
       >
         <NavigationMenuList>
           <NavigationMenuItem>
-            <Link to="/docs">
+            <Link to="/console/guest/add">
               <NavigationMenuLink className="mx-3 text-lg hover:font-bold hover:text-[#fcbe93]">
                 Guest
               </NavigationMenuLink>

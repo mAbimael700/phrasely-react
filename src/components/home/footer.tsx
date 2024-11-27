@@ -11,7 +11,7 @@ export const Footer: React.FC<FooterProps> = ({ data }) => {
                     <ul className="flex flex-wrap items-center gap-4 mt-6 sm:text-sm sm:mt-0">
                         {
                             data.map((item, idx) => (
-                                <li className="text-orange-950 hover:text-orange-800 duration-150">
+                                <li className="text-orange-950 hover:text-orange-800 hover:font-semibold duration-150">
                                     <a key={idx} href={item.href}>
                                         {item.name}
                                     </a>

@@ -3,7 +3,7 @@ import { Teacher, Guest, UserState } from '../../types/userType';
 
 const initialState: UserState = {
     teacher: null,
-    guests: [],
+    guests: [] as Guest[], 
 };
 
 const userSlice = createSlice({
@@ -16,8 +16,11 @@ const userSlice = createSlice({
         },
         // Registrar invitado
         registerGuest(state, action: PayloadAction<Guest>) {
+            if (!state.guests) {
+                state.guests = [];
+            }
             state.guests.push(action.payload);
-        },
+        },          
         // Restablecer Invitados
         resetGuests(state) {
             state.guests = [];
