@@ -5,7 +5,7 @@ import { Sentence } from '../types/sentenceType';
 export const useUser = () => {
     const dispatch = useAppDispatch();
 
-    const registerNewSentence = (sentence: Sentence) => {
+    const registerNewSentence = (sentence: Sentence[]) => {
         dispatch(addSentence(sentence));
     };
 
