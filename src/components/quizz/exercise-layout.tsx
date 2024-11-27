@@ -9,6 +9,7 @@ import { updateScore, nextGuest } from "@/redux/slices/userSlice";
 
 interface ExerciseLayoutProps {
     backgroundImage: string;
+    Glassbackground: string;
     data: Question[] | Sentence[];
     current: number;
     topic: string;
@@ -18,6 +19,7 @@ interface ExerciseLayoutProps {
 
 export const ExerciseLayout: React.FC<ExerciseLayoutProps> = ({  
     backgroundImage, 
+    Glassbackground,
     data, 
     current, 
     topic, 
@@ -28,8 +30,8 @@ export const ExerciseLayout: React.FC<ExerciseLayoutProps> = ({
     const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
     const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
 
-    const { guests, currentIndex } = useAppSelector(state => state.user);
-    const currentGuest = guests[currentIndex];
+    const { guests = [], currentIndex = 0 } = useAppSelector(state => state.user);
+    const currentGuest = guests?.[currentIndex];
 
     const handleAnswerSelect = (answerIdx: number) => {
         setSelectedAnswer(answerIdx);
@@ -40,11 +42,10 @@ export const ExerciseLayout: React.FC<ExerciseLayoutProps> = ({
     const handleNextQuestion = () => {
         if (isCorrect !== null) {
             if (isCorrect) {
-                // Si la respuesta es correcta, se actualiza el puntaje del jugador actual
-                dispatch(updateScore(1)); // O la cantidad que desees agregar
+                dispatch(updateScore(1));
             }
 
-            dispatch(nextGuest()); // Avanzamos al siguiente invitado
+            dispatch(nextGuest());
             onNext();
             setSelectedAnswer(null);
             setIsCorrect(null);
@@ -59,12 +60,14 @@ export const ExerciseLayout: React.FC<ExerciseLayoutProps> = ({
             <div className="flex flex-col items-center justify-center min-h-screen">
                 <ExerciseSentenceCard 
                     title={topic}
+                    Glassbackground={Glassbackground}
+                    guest={currentGuest.displayName}
                     label={(data as (Question | Sentence)[])[current]?.label}
                     answers={(data as (Question | Sentence)[])[current]?.options}
                     onAnswerSelect={handleAnswerSelect}
                     selectedAnswer={selectedAnswer}
                     isCorrect={isCorrect}
-                    data={data}  // Pasa la data
+                    data={data} 
                     current={current} 
                 />
                 <div className="flex flex-row space-x-3 my-9">
@@ -77,11 +80,6 @@ export const ExerciseLayout: React.FC<ExerciseLayoutProps> = ({
                         icon={<IoArrowForwardOutline size={22} />} 
                     />
                 </div>
-                {/*
-                <div className="text-center text-white">
-                    <p>Score de {currentGuest.displayName}: {currentGuest.score}</p>
-                </div>
-                */}
             </div>
         </div>
     );

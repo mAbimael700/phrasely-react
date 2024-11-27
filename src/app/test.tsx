@@ -7,16 +7,16 @@ import { next as questionNext, prev as questionPrev } from "@/redux/slices/quest
 const questions: Question[] = [
     {
         id: '1',
-        label: '¿Cuál es el planeta más cercano al Sol?',
-        options: ['Venus', 'Marte', 'Mercurio'],
+        label: 'You ____ (cook) for the class',
+        options: ['Cooking', 'is cooking', 'are cooking'],
         correct: 2,
     },
     {
         id: '2',
-        label: '¿Cuál es el elemento químico más abundante en la Tierra?',
-        options: ['Oxígeno', 'Silicio', 'Hidrógeno'],
-        correct: 0,
-    },
+        label: 'I am (work) for my fathers business',
+        options: ['Worked', 'Working', 'Works'],
+        correct: 1,
+    }
 ];
 
 export const TestCode = () => {
@@ -28,6 +28,7 @@ export const TestCode = () => {
     return (
         <>  
             <ExerciseLayout 
+                Glassbackground="bg-purple-300/20"
                 backgroundImage={Cube} 
                 data={questions} 
                 current={current} 

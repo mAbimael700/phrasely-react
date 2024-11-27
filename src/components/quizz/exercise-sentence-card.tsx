@@ -1,10 +1,13 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "../ui/button"
 import { Question } from '@/types/questionType';
 import { Sentence } from '@/types/sentenceType';
+import { GoPerson } from "react-icons/go";
+import { capitalizeText } from "@/lib/utils";
+import { Button } from "../ui/button"
 
 interface ExerciseSentenceCardProps {
     title: string;
+    guest: string;
     label: string;
     answers: Array<String>;
     onAnswerSelect: (answerIdx: number) => void;
@@ -12,17 +15,26 @@ interface ExerciseSentenceCardProps {
     isCorrect: boolean | null;
     data: (Question | Sentence)[]; 
     current: number; 
+    Glassbackground: String;
 }
 
-export const ExerciseSentenceCard = ({ title, label, answers, onAnswerSelect, selectedAnswer, isCorrect, data, current }: ExerciseSentenceCardProps) => {
+export const ExerciseSentenceCard = ({ title, guest, label, answers, onAnswerSelect, selectedAnswer, isCorrect, data, current, Glassbackground = "bg-white/10" }: ExerciseSentenceCardProps) => {
     return (
-        <Card className="bg-orange-100 border-orange-600 rounded-2xl bg-white/10 backdrop-blur-2xl border border-white/20 shadow-lg">
-            <CardHeader>
-                <CardTitle className=" text-2xl text-center rounded-t-md text-white">{title}</CardTitle>
+        <Card className={`rounded-2xl min-w-[600px] min-h-[300px] ${Glassbackground} backdrop-blur-2xl border border-white/20 shadow-lg`}>
+            <CardHeader className="flex flex-row justify-between p-4">
+                <div className="flex items-center space-x-2 text-white">
+                    <GoPerson size={20} fontSize={700} />
+                    <p className="text-base font-medium">{capitalizeText(guest)}</p>
+                </div>
+
+                <CardTitle className="text-lg text-white">
+                    {capitalizeText(title)}
+                </CardTitle>
             </CardHeader>
+            <div className="h-px bg-white/20 backdrop-blur-sm my-1"></div>
 
             <CardContent className="rounded-2xl">
-                <p className="text-3xl text-center text-slate-100">
+                <p className="text-3xl text-center text-slate-100 pt-5 py-2">
                     {label}
                 </p>
 
@@ -31,7 +43,7 @@ export const ExerciseSentenceCard = ({ title, label, answers, onAnswerSelect, se
                         let buttonClass = "w-28 bg-[#594668] hover:bg-[#AA85C6] rounded-2xl text-white";
                         if (selectedAnswer !== null) {
                             if (selectedAnswer === idx && isCorrect) {
-                                buttonClass = "w-28 bg-green-500 rounded-lg text-white";  
+                                buttonClass = "w-28 bg-green-500 rounded-2xl text-white";  
                             } else if (selectedAnswer === idx && !isCorrect) {
                                 buttonClass = "w-28 bg-red-500 rounded-2xl text-white"; 
                             }
@@ -51,7 +63,7 @@ export const ExerciseSentenceCard = ({ title, label, answers, onAnswerSelect, se
                 </div>
 
                 {isCorrect !== null && (
-                    <div className="text-center mt-4">
+                    <div className="text-center">
                         {isCorrect ? (
                             <p className="text-white text-xl font-semibold">¡Respuesta correcta!</p>
                         ) : (

@@ -8,10 +8,17 @@ import { IoOpenOutline } from "react-icons/io5";
 import { useAppSelector } from "@/redux/reduxHooks";
 import { Link, useNavigate } from 'react-router-dom';
 
+const games = [
+    { title: 'Translation Challenge', tags: ['Funny', 'Translator'] , image: Glass, url: '/' },
+    { title: 'WordWise', tags: ['Trivia', 'Skills', 'Fun'] , image: Foodies, url: '/sentence/add' },
+    { title: 'Sece-Sentences', tags: ['Practice', 'Knowledge'] , image: Cube, url: '/question/add' },
+];
+
 interface GameCardProps {
     title: string;
     tags: string[]; 
     image: string;
+    url: string;
 }
 
 const ConsoleHeader = () => {
@@ -48,7 +55,7 @@ const ConsoleHeader = () => {
     )
 }
 
-const GameCard: React.FC<GameCardProps> = ({ title, tags, image }) => {
+const GameCard: React.FC<GameCardProps> = ({ title, tags, image, url }) => {
     return (
         <article
             className={`hover:animate-background rounded-xl bg-gradient-to-r from-orange-300 via-orange-400 to-orange-500 p-1 shadow-xl transition hover:bg-[length:400%_400%] hover:shadow-sm hover:[animation-duration:_4s]`}
@@ -57,10 +64,10 @@ const GameCard: React.FC<GameCardProps> = ({ title, tags, image }) => {
                 className="relative rounded-[10px] bg-cover bg-center p-4 sm:p-6"
                 style={{ backgroundImage: `url(${image})`, height: '250px' }}
             >
-                <div className="absolute inset-0 bg-orange-100 bg-opacity-50"></div>
+                <div className="absolute inset-0 bg-orange-100 bg-opacity-60"></div>
                 
                 <div className="relative z-10 flex flex-col justify-center h-full">
-                    <a href="#">
+                    <a href={url}>
                         <h3 className="mt-0.5 text-2xl font-medium text-orange-900">{title}</h3>
                     </a>
 
@@ -68,7 +75,7 @@ const GameCard: React.FC<GameCardProps> = ({ title, tags, image }) => {
                         {tags.map((tag, idx) => (
                             <span
                                 key={idx}
-                                className={`whitespace-nowrap rounded-full bg-orange-100 px-2.5 py-0.5 text-xs text-orange-600`}
+                                className={`whitespace-nowrap rounded-full border border-orange-200 bg-orange-100 px-2.5 py-0.5 text-xs text-orange-600 pointer-events-none select-none`}
                             >
                                 {tag}
                             </span>
@@ -102,21 +109,15 @@ export const GameConsole = () => {
         >
             <ConsoleHeader />
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-8">
-                <GameCard 
-                    title="Translation Challenge"
-                    tags={['Funny', 'Translator']}
-                    image={Glass}
-                />
-                <GameCard 
-                    title="WordWise"
-                    tags={['Trivia', 'Skills', 'Fun']}
-                    image={Foodies}
-                />
-                <GameCard 
-                    title="Sece-Sentences"
-                    tags={['Practice', 'Knowledge']}
-                    image={Cube}
-                />
+                {games.map((item, idx)=>(
+                    <GameCard 
+                        key={idx}
+                        title={item.title}
+                        tags={item.tags}
+                        image={item.image}
+                        url={item.url}
+                    />
+                ))}
             </div>
             <Footer data={navs} />
         </div>

@@ -39,7 +39,10 @@ export const GuestSession = () => {
             registerNewGuest({ id: `${guests.length + 1}`, displayName, score });
             //setGuest((prevGuests) => [...prevGuests, { displayName, score }]);
 
-            //navigate('/console');
+            setInputValue("");
+            if (guests.length == 5) {
+                navigate('/console');
+            }
         } catch (error) {
             console.error(error);
             setErrorMessage('Error al registrar el invitado.');
