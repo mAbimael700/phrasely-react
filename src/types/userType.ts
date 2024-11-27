@@ -19,4 +19,5 @@ export interface QuestionHistory {
 export interface UserState {
     teacher: Teacher | null;
     guests: Guest[];
+    currentIndex: number;
 }
