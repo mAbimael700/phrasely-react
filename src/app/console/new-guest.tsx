@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { IoCloseSharp } from "react-icons/io5";
+import { IoCloseSharp, IoArrowForwardOutline } from "react-icons/io5";
 import { useAppSelector } from "@/redux/reduxHooks";
 import { useNavigate } from 'react-router-dom';
 import { TextInput } from "@/components/auth/text-input"
@@ -12,10 +12,10 @@ type GuestInfo = {
 
 export const GuestSession = () => {
     const navigate = useNavigate();
-    const { registerNewGuest } = useUser();
+    const { registerNewGuest, deleteGuest } = useUser();
     const guests = useAppSelector((state) => state.user?.guests || []);
 
-    const [Guest, setGuest] = useState<GuestInfo[]>([]); 
+    //const [Guest, setGuest] = useState<GuestInfo[]>([]); 
     const [inputValue, setInputValue] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [isInvalid, setIsInvalid] = useState(false);
@@ -28,22 +28,18 @@ export const GuestSession = () => {
     };
 
     const handleGuest = ({ displayName, score }: GuestInfo) => {
-        /*
         if (guests.length >= 5) {
             setIsInvalid(true);
             setErrorMessage('No puedes registrar más de 5 invitados.');
             return;
         }
-        */
 
         try {
             setIsLoading(true);
             registerNewGuest({ id: `${guests.length + 1}`, displayName, score });
+            //setGuest((prevGuests) => [...prevGuests, { displayName, score }]);
 
-            setGuest((prevGuests) => [...prevGuests, { displayName, score }]);
-
-
-            navigate('/console');
+            //navigate('/console');
         } catch (error) {
             console.error(error);
             setErrorMessage('Error al registrar el invitado.');
@@ -71,33 +67,56 @@ export const GuestSession = () => {
                 game session.
             </h1>
 
-            <TextInput
-                placeholderSM="Enter a guest name"
-                placeholder="Please enter a guest name"
-                isInvalid={isInvalid}
-                value={inputValue}
-                type="text"
-                onChange={handleChange}
-                fontSize="45"
-                marginBottom="4"
-            />
-            {Guest.map((item, idx) => (
-                <div key={idx}>
-                    <p>{item.displayName}</p>
+            <div className=''>
+                <TextInput
+                    placeholderSM="Enter a guest name"
+                    placeholder="Please enter a guest name"
+                    isInvalid={isInvalid}
+                    value={inputValue}
+                    type="text"
+                    onChange={handleChange}
+                    fontSize="45"
+                    marginBottom="4"
+                />
+                
+                {isInvalid && <p className="text-red-600 font-semibold text-sm">{errorMessage}</p>}
+
+                <div className="flex justify-between items-center mt-4">
+                    <button
+                        onClick={() => handleGuest({ displayName: inputValue, score: 0 })}
+                        className="flex items-center justify-center rounded-xl bg-orange-800 border border-orange-700 px-4 py-4 text-sm font-semibold text-gray-100 shadow-lg hover:bg-orange-700"
+                        type="button"
+                    >
+                        <IoArrowForwardOutline />
+                    </button>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-4">
+                        {guests.map((item, idx) => (
+                            <button
+                                onClick={() => deleteGuest(item.id)}
+                                key={idx}
+                                className="bg-orange-800 hover:bg-orange-700 px-3 py-1 flex items-center justify-center rounded-xl text-xs sm:text-sm md:text-base"
+                            >
+                                <p className="text-orange-100 font-medium">{item.displayName}</p>
+                            </button>
+                        ))}
+                    </div>
                 </div>
-            ))}
 
-            {isInvalid && <p className="text-red-600 font-semibold text-sm">{errorMessage}</p>}
-
-            <div className="flex justify-between">
-                <button
-                    onClick={() => handleGuest({ displayName: inputValue, score: 0 })}
-                    className="flex items-center justify-center rounded-xl bg-orange-800 border border-orange-700 px-4 py-2 text-sm font-semibold text-gray-100 shadow-lg hover:bg-orange-700 ml-auto"
-                    type="button"
-                >
-                    <span className="text-xl font-medium mr-1">{isLoading ? 'Registrando...' : 'Guardar'}</span>
-                </button>
+                
             </div>
+            {/*
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-4">
+                {guests.map((item, idx) => (
+                    <div
+                        key={idx}
+                        className="bg-orange-600 px-3 py-1 flex items-center justify-center rounded-full text-xs sm:text-sm md:text-base"
+                    >
+                        <p className="text-orange-100 font-medium">{item.displayName}</p>
+                    </div>
+                ))}
+            </div>
+            */}
         </div>
     );
 };

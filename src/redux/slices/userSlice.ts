@@ -4,6 +4,7 @@ import { Teacher, Guest, UserState } from '../../types/userType';
 const initialState: UserState = {
     teacher: null,
     guests: [] as Guest[], 
+    currentIndex: 0,
 };
 
 const userSlice = createSlice({
@@ -21,6 +22,13 @@ const userSlice = createSlice({
             }
             state.guests.push(action.payload);
         },          
+        nextGuest: (state) => {
+            state.currentIndex = (state.currentIndex + 1) % state.guests.length;
+        },
+        updateScore: (state, action: PayloadAction<number>) => {
+            const currentGuest = state.guests[state.currentIndex];
+            currentGuest.score += action.payload;
+        },
         // Restablecer Invitados
         resetGuests(state) {
             state.guests = [];
@@ -36,5 +44,5 @@ const userSlice = createSlice({
     },
 });
 
-export const { registerTeacher, registerGuest, resetGuests, removeGuest, resetUser } = userSlice.actions;
+export const { registerTeacher, registerGuest, nextGuest, updateScore, resetGuests, removeGuest, resetUser } = userSlice.actions;
 export default userSlice.reducer;

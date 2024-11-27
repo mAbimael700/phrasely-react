@@ -101,7 +101,7 @@ export const SignupTeacher = () => {
                 className="flex items-center justify-center rounded-xl bg-orange-800 border border-orange-700 px-4 py-2 text-sm font-semibold text-gray-100 shadow-lg hover:bg-orange-700 ml-auto"
                 type="button"
                 >
-                <span className="text-xl font-medium mr-1">{isLoading ? 'Registrando...' : step === 1 ? 'Continuar' : 'Registrar'}</span>
+                <span className="text-xl font-medium mr-1">{isLoading ? 'Saving...' : step === 1 ? 'Next' : 'Registrar'}</span>
                 </button>
             </div>
         </main>
