@@ -19,10 +19,15 @@ export const SentenceFormTopic = () => {
                 Sence-Sentences
             </div>
             <div>
-                <label className="font-medium text-5xl block text-slate-900">Topic to learn</label>
+                <label className="mt-20 mb-6 text-slate-900 font-medium text-5xl lg:text-6xl">
+
+                    Write the topic that{" "}
+                    <span className="hidden lg:inline"> <br /> </span>
+                    you would like to learn
+                </label>
                 <Input
                     {...register("title")}
-                    className="text-5xl w-full mt-2 p-2 border-b text-secondary-foreground"
+                    className="text-5xl w-full mt-2 p-2 border-b text-orange-700"
                 />
                 <p className="text-sm text-slate-800 mt-2">
                     This is the topic of exercises you want to create the game for.

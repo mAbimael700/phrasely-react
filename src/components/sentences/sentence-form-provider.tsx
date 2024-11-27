@@ -4,12 +4,12 @@ import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, FormProvider } from "react-hook-form"
 import React from "react"
-import { addSentence, addTopic } from "@/redux/slices/sentenceSlice"
 import { useSentenceSelection } from "@/contexts/sentence-form-context"
 import { Outlet, useLocation, useNavigate } from "react-router-dom"
 import { Button } from "../ui/button"
 import { Sentence } from "@/types/sentenceType"
 import { toast } from "@/hooks/use-toast"
+import { useSentence } from "@/hooks/useSentence"
 export const formSchema = z.object({
     title: z.string().min(2, { message: "The title must have at least 2 characters." }),
     sentences: z.array(
@@ -36,6 +36,7 @@ export const formSchema = z.object({
 export const SentenceForm = () => {
     const goTo = useNavigate();
     const { pathname } = useLocation()
+    const { registerNewSentence, registerTopicSentence } = useSentence()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -59,8 +60,6 @@ export const SentenceForm = () => {
     function onSubmit(values: z.infer<typeof formSchema>) {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
-        console.log(values)
-        addTopic(values.title);
         const sentences = values.sentences.map(s => {
 
             const sentence: Sentence = {
@@ -71,13 +70,11 @@ export const SentenceForm = () => {
                 options: s.answers
             }
             return sentence
-
-
         }
-
         )
 
-        addSentence(sentences)
+        registerNewSentence(sentences)
+        registerTopicSentence(values.title)
 
         toast({
             title: "Sentences added succesfully"

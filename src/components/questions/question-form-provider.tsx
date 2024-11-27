@@ -36,7 +36,7 @@ export const formSchema = z.object({
 export const QuestionFormProvider = () => {
 
 
-    const { handleNewQuestion } = useQuestion()
+    const { handleNewQuestion, registerTopicSentence } = useQuestion()
     const { pathname } = useLocation()
     const goTo = useNavigate();
 
@@ -57,9 +57,6 @@ export const QuestionFormProvider = () => {
     // 2. Define a submit handler.
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
 
-        // Procede si no hay errores
-        console.log(values);
-
         //addTopic(values.title)
         const questions = values.questions.map(q => {
             const question: Question = {
@@ -71,9 +68,7 @@ export const QuestionFormProvider = () => {
             return question
         })
 
-        console.log(questions);
-
-
+        registerTopicSentence(values.title)
         handleNewQuestion(questions)
 
         toast({
