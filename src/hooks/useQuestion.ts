@@ -5,7 +5,7 @@ import { Question } from '@/types/questionType';
 export const useQuestion = () => {
     const dispatch = useAppDispatch();
 
-    const handleNewQuestion = (question: Question) => {
+    const handleNewQuestion = (question: Question[]) => {
         dispatch(addQuestion(question));
     };
 
