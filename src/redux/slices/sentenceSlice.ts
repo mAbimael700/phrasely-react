@@ -20,11 +20,8 @@ const sentenceSlice = createSlice({
             state.topic = initialState.topic; 
         },
         // Añadir oración
-        addSentence(state, action: PayloadAction<Sentence>) {
-            if (!state.sentences) {
-                state.sentences = [];
-            }
-            state.sentences.push(action.payload);
+        addSentence(state, action: PayloadAction<Sentence[]>) {
+            state.sentences = action.payload;
         },
         // Eliminar oración
         removeSentence(state, action: PayloadAction<number>) {
