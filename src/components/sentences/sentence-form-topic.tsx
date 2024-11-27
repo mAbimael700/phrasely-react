@@ -16,7 +16,7 @@ export const SentenceFormTopic = () => {
                     variant: "link",
                     className: "text-slate-950 "
                 })}><Cross1Icon /></Link>
-                Creating sentence exercise
+                Sence-Sentences
             </div>
             <div>
                 <label className="font-medium text-5xl block text-slate-900">Topic to learn</label>
