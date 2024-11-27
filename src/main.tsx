@@ -12,9 +12,16 @@ import { QuestionsGameRoutes } from '@/routes/question-routes.tsx';
 import { SentenceRoutes } from '@/routes/senteces-routes';
 import { IndexRoutes } from '@/routes/index-routes'
 import { DashboardFormRoutes } from '@/routes/dashboard-forms-routes'
+import { ConsoleRoutes } from './routes/console-routes';
+import { Toaster } from "@/components/ui/toaster"
+import { AuthRoutes } from './routes/auth-routes';
 
-
-const routes = routerMerger(IndexRoutes, DashboardFormRoutes, SentenceRoutes, QuestionsGameRoutes)
+const routes = routerMerger(IndexRoutes,
+  DashboardFormRoutes,
+  SentenceRoutes,
+  QuestionsGameRoutes,
+  ConsoleRoutes,
+  AuthRoutes)
 
 const router = createBrowserRouter(routes)
 
@@ -23,6 +30,7 @@ createRoot(document.getElementById('root')!).render(
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <RouterProvider router={router} />
+        <Toaster />
       </PersistGate>
     </Provider>
   </StrictMode>,

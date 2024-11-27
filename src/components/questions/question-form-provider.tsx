@@ -1,12 +1,15 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { addQuestion, addTopic } from "@/redux/slices/questionSlice"
 import { FormProvider, useForm } from "react-hook-form";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { z } from "zod"
 import { Button } from "../ui/button";
 import { useQuestionSelection } from "@/contexts/question-form-context";
 import React from "react";
+import { Question } from "@/types/questionType";
+import { toast } from "@/hooks/use-toast";
 
 export const formSchema = z.object({
     title: z.string().min(2, { message: "The title must have at least 2 characters." }),
@@ -34,6 +37,7 @@ export const QuestionFormProvider = () => {
 
 
     const { pathname } = useLocation()
+    const goTo = useNavigate();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -54,15 +58,27 @@ export const QuestionFormProvider = () => {
 
     // 2. Define a submit handler.
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        // Valida todos los campos antes de enviar
-        const isValid = await trigger();
-        if (!isValid) {
-            console.log("There are validation errors.");
-            return;
-        }
 
         // Procede si no hay errores
         console.log(values);
+
+        addTopic(values.title)
+        const questions = values.questions.map(q => {
+            const question: Question = {
+                id: crypto.randomUUID(),
+                correct: q.correct_answer,
+                label: q.question,
+                options: q.answers
+            }
+            return question
+        })
+
+        addQuestion(questions)
+
+        toast({
+            title: "Questions added succesfully"
+        })
+        goTo("/console")
     };
 
     // Mantener el índice de la sentencia seleccionada

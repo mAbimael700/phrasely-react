@@ -12,14 +12,14 @@ export const SentenceFormTopic = () => {
         <div className="space-y-6">
 
             <div className="absolute top-10 left-5 flex items-center gap-1 text-slate-950 ">
-                <Link to=".." className={buttonVariants({
+                <Link to="/console" className={buttonVariants({
                     variant: "link",
                     className: "text-slate-950 "
                 })}><Cross1Icon /></Link>
                 Creating sentence exercise
             </div>
             <div>
-                <label className="text-2xl block text-slate-900">Topic to learn</label>
+                <label className="font-medium text-5xl block text-slate-900">Topic to learn</label>
                 <Input
                     {...register("title")}
                     className="text-5xl w-full mt-2 p-2 border-b text-secondary-foreground"

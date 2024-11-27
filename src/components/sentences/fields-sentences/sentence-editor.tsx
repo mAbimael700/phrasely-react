@@ -82,7 +82,7 @@ export function SentenceEditor({ selectedIndex, sentences, addSentence }: Senten
                                 {...register(`sentences.${selectedIndex}.answers.${answerIndex}`)}
                                 className="flex-1 p-2 border rounded"
                                 onKeyDown={(e) => {
-                                    handleGrammarCommands(e, `sentences.${selectedIndex}.sentence.answers.${answerIndex}`,
+                                    handleGrammarCommands(e, `sentences.${selectedIndex}.answers.${answerIndex}`,
                                         setValue)
                                 }}
                             />

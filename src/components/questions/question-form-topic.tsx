@@ -19,10 +19,10 @@ export const QuestionFormTopic = () => {
                  Creating a questions exercise
             </div>
             <div>
-                <label className="text-2xl block text-slate-900">Topic to learn</label>
+                <label className="font-medium text-5xl block text-slate-900">Topic to learn</label>
                 <Input
                     {...register("title")}
-                    className="text-5xl w-full mt-2 p-2 border-b text-secondary-foreground"
+                    className="text-xl md:text-5xl w-full mt-2 p-2 border-b text-secondary-foreground"
                 />
                 <p className="text-sm text-slate-800 mt-2">
                     This is the topic of exercises you want to create the game for.
