@@ -15,10 +15,12 @@ import { DashboardFormRoutes } from '@/routes/dashboard-forms-routes'
 import { ConsoleRoutes } from './routes/console-routes';
 import { Toaster } from "@/components/ui/toaster"
 import { AuthRoutes } from './routes/auth-routes';
+import translationChallengeRoutes from "@/routes/translation-challenge-routes";
 
 const routes = routerMerger(IndexRoutes,
   DashboardFormRoutes,
   SentenceRoutes,
+  translationChallengeRoutes,
   QuestionsGameRoutes,
   ConsoleRoutes,
   AuthRoutes)
