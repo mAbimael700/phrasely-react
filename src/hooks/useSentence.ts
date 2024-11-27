@@ -1,9 +1,13 @@
-import { useAppDispatch } from '../redux/reduxHooks';
-import { addSentence, removeSentence } from '../redux/slices/sentenceSlice';
-import { Sentence } from '../types/sentenceType';
+import { useAppDispatch } from '@/redux/reduxHooks';
+import { addSentence, addTopic, removeSentence} from '@/redux/slices/sentenceSlice';
+import { Sentence, SentenceState } from '@/types/sentenceType';
 
-export const useUser = () => {
+export const useSentence = () => {
     const dispatch = useAppDispatch();
+
+    const registerTopicSentence = (topic: SentenceState['topic']) => {
+        dispatch(addTopic(topic))
+    }
 
     const registerNewSentence = (sentence: Sentence[]) => {
         dispatch(addSentence(sentence));
@@ -15,6 +19,7 @@ export const useUser = () => {
 
     return {
         registerNewSentence,
-        deleteSentence
+        deleteSentence,
+        registerTopicSentence
     };
 };
