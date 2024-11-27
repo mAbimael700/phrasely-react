@@ -21,6 +21,9 @@ const sentenceSlice = createSlice({
         },
         // Añadir oración
         addSentence(state, action: PayloadAction<Sentence>) {
+            if (!state.sentences) {
+                state.sentences = [];
+            }
             state.sentences.push(action.payload);
         },
         // Eliminar oración

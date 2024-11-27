@@ -13,6 +13,7 @@ import { SentenceRoutes } from '@/routes/senteces-routes';
 import { IndexRoutes } from '@/routes/index-routes'
 import { DashboardFormRoutes } from '@/routes/dashboard-forms-routes'
 
+
 const routes = routerMerger(IndexRoutes, DashboardFormRoutes, SentenceRoutes, QuestionsGameRoutes)
 
 const router = createBrowserRouter(routes)
