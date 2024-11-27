@@ -3,56 +3,40 @@ import { UseFormSetValue } from "react-hook-form";
 // Función para manejar comandos de gramática en cualquier campo de texto
 export const handleGrammarCommands = (
     event: React.KeyboardEvent<HTMLInputElement>,
-    fieldName: string, // Nombre del campo (e.g., "sentences.0.sentence_to_show")
-    setValue: UseFormSetValue<any> // Función setValue de react-hook-form
+    fieldName: string,
+    setValue: UseFormSetValue<any>
 ) => {
-    if (event.ctrlKey) {
-        const inputElement = event.target as HTMLInputElement;
-        const currentValue = inputElement.value;
-        const cursorStart = inputElement.selectionStart || 0;
-        const cursorEnd = inputElement.selectionEnd || 0;
+    const inputElement = event.target as HTMLInputElement;
+    const currentValue = inputElement.value;
+    const cursorStart = inputElement.selectionStart || 0;
+    const cursorEnd = inputElement.selectionEnd || 0;
 
-        let newValue = currentValue;
+    let newValue = currentValue;
 
-        switch (event.key.toLowerCase()) {
-            case "e": // Add "-ed"
-                event.preventDefault();
-                newValue = insertAtCursor(currentValue, cursorStart, cursorEnd, "ed");
-                break;
+    // Crear una clave única para la combinación de teclas
+    const keyCombination = `${event.ctrlKey ? "Ctrl+" : ""}${event.altKey ? "Alt+" : ""}${event.key.toLowerCase()}`;
 
-            case "i": // Add "-ing"
-                event.preventDefault();
-                newValue = insertAtCursor(currentValue, cursorStart, cursorEnd, "ing");
-                break;
+    // Definir las combinaciones de teclas permitidas
+    const keyActions: Record<string, () => string> = {
+        "Ctrl+e": () => insertAtCursor(currentValue, cursorStart, cursorEnd, "ed"),
+        "Ctrl+i": () => insertAtCursor(currentValue, cursorStart, cursorEnd, "ing"),
+        "Ctrl+s": () => insertAtCursor(currentValue, cursorStart, cursorEnd, "s"),
+        "Ctrl+r": () => capitalizeWord(currentValue, cursorStart, cursorEnd),
+        "Ctrl+u": () => currentValue.toUpperCase(),
+        "Ctrl+l": () => currentValue.toLowerCase(),
+        "Alt+t": () => encloseInQuotes(currentValue, cursorStart, cursorEnd),
+        "Alt+p": () => insertAtCursor(currentValue, cursorStart, cursorEnd, "pos."),
+        "Alt+n": () => insertAtCursor(currentValue, cursorStart, cursorEnd, "neg."),
+        "Alt+q": () => insertAtCursor(currentValue, cursorStart, cursorEnd, "que."),
+        "Alt+i": () => insertAtCursor(currentValue, cursorStart, cursorEnd, "ing."),
+        "Ctrl+Alt+p": () => insertAtCursor(currentValue, cursorStart, cursorEnd, "pres."),
+        "Ctrl+Alt+n": () => insertAtCursor(currentValue, cursorStart, cursorEnd, "past."),
+    };
 
-            case "s": // Convert to plural
-                event.preventDefault();
-                newValue = insertAtCursor(currentValue, cursorStart, cursorEnd, "s");
-                break;
-
-            case "r": // Capitalize first letter
-                event.preventDefault();
-                newValue = capitalizeWord(currentValue, cursorStart, cursorEnd);
-                break;
-
-            case "u": // Convert to uppercase
-                event.preventDefault();
-                newValue = currentValue.toUpperCase();
-                break;
-
-            case "l": // Convert to lowercase
-                event.preventDefault();
-                newValue = currentValue.toLowerCase();
-                break;
-
-            case "t": // Enclose in quotes
-                event.preventDefault();
-                newValue = encloseInQuotes(currentValue, cursorStart, cursorEnd);
-                break;
-
-            default:
-                return; // No matching command
-        }
+    // Verificar si la combinación está definida
+    if (keyActions[keyCombination]) {
+        event.preventDefault(); // Evitar el comportamiento predeterminado del navegador
+        newValue = keyActions[keyCombination](); // Ejecutar la acción correspondiente
 
         // Actualizar el valor del campo genérico
         setValue(fieldName, newValue);
@@ -63,6 +47,7 @@ export const handleGrammarCommands = (
         }, 0);
     }
 };
+
 
 // Función auxiliar para insertar texto en el cursor o sobre una selección
 const insertAtCursor = (

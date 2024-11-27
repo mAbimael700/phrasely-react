@@ -1,42 +1,29 @@
-import { UseFormReturn } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
-import { Cross1Icon, TrashIcon } from "@radix-ui/react-icons";
+import { Card, CardHeader, CardTitle, CardContent, CardFooter, CardDescription } from "@/components/ui/card";
+import { SentenceCardForm } from "./sentence-card-form";
 import { handleGrammarCommands } from "@/lib/commands/handle-grammar-commands";
-
-interface FieldsSentencesProps {
-    form: UseFormReturn<{
-        title: string;
-        sentences: {
-            original_sentence: string;
-            sentence_to_show: string;
-            answers: string[];
-        }[];
-    }>;
-}
-
-export function FieldsSentences({ form }: FieldsSentencesProps) {
-    const { register, watch, setValue, getValues, formState } = form;
+import { useSentenceSelection } from "@/contexts/sentence-form-context";
+import { ISenteceFormSchema } from "./fields-sentences/types/ISentenceFormSchema";
+import React from "react";
+import { Cross1Icon } from "@radix-ui/react-icons";
 
 
-    // Observe the current state of sentences
+
+export function FieldsSentences() {
+    const { register, watch, setValue, getValues, formState } = useFormContext<ISenteceFormSchema>();
+
+    // Mantener el índice de la sentencia seleccionada
+    const { selectedSentenceIndex, setSelectedSentenceIndex } = useSentenceSelection();
+
+    // Observar el estado actual de las sentencias
     const sentences = watch("sentences");
 
-    // Custom handler to add an answer to a specific sentence
-    const addAnswer = (sentenceIndex: number) => {
-        const currentAnswers = getValues(`sentences.${sentenceIndex}.answers`) || [];
-        setValue(`sentences.${sentenceIndex}.answers`, [...currentAnswers, ""]);
-    };
 
-    // Custom handler to remove an answer from a specific sentence
-    const removeAnswer = (sentenceIndex: number, answerIndex: number) => {
-        const currentAnswers = getValues(`sentences.${sentenceIndex}.answers`) || [];
-        const updatedAnswers = currentAnswers.filter((_, i) => i !== answerIndex);
-        setValue(`sentences.${sentenceIndex}.answers`, updatedAnswers);
-    };
+    const currentSentence = sentences[selectedSentenceIndex ?? 0] || {};
 
-    // Custom handler to add a new sentence
+    // Función para agregar una nueva sentencia
     const addSentence = () => {
         const currentSentences = getValues("sentences") || [];
         setValue("sentences", [
@@ -44,17 +31,14 @@ export function FieldsSentences({ form }: FieldsSentencesProps) {
             {
                 original_sentence: "",
                 sentence_to_show: "",
-                answers: [""], // Initialize with one empty answer
+                answers: [""], // Inicializa con una respuesta vacía,
+                correct_answer: 0
             },
         ]);
+
+        setSelectedSentenceIndex(currentSentences.length)
     };
 
-    // Custom handler to remove a sentence
-    const removeSentence = (sentenceIndex: number) => {
-        const currentSentences = getValues("sentences") || [];
-        const updatedSentences = currentSentences.filter((_, i) => i !== sentenceIndex);
-        setValue("sentences", updatedSentences);
-    };
 
 
     // Handler para agregar un espacio en blanco ("___")
@@ -68,7 +52,7 @@ export function FieldsSentences({ form }: FieldsSentencesProps) {
         // Inserta "___" en la posición del cursor
         const updatedValue =
             currentValue.slice(0, cursorPosition) +
-            " ___" +
+            "___" +
             currentValue.slice(cursorPosition);
 
         // Actualiza el valor en el formulario
@@ -121,144 +105,154 @@ export function FieldsSentences({ form }: FieldsSentencesProps) {
     };
 
 
-
-
-
     return (
-        <div className="space-y-4">
-            <h2 className="text-2xl font-semibold">Sentences</h2>
+        <div className="space-y-4 selection:text-primary-foreground selection:bg-primary">
 
+            <h2 className="text-2xl font-semibold">Let's gonna add some sentences!</h2>
+            <div className="grid md:grid-cols-2 gap-5">
+                {/* Card para editar la sentencia activa */}
+                {
+                    selectedSentenceIndex != null &&
 
-            <div className="">
-                {sentences.map((sentence, index) => (
-                    <Card key={index} className="space-y-4 border p-4 rounded-md">
-
-                        <CardHeader className="pb-1 flex flex-row items-center justify-between">
-                            <CardTitle className="text-2xl">
-                                Sentence {index + 1}
-                            </CardTitle>
-
-                            <Button
-                                variant='ghost'
-                                size='icon'
-                                onClick={() => removeSentence(index)}
-                                className="text-destructive hover:underline"
-                            >
-                                <Cross1Icon />
-                            </Button>
+                    <Card key={selectedSentenceIndex} className="border p-4 rounded-md space-y-4">
+                        <CardHeader className="border-b">
+                            <CardTitle className="text-2xl">Edit Sentence {selectedSentenceIndex + 1}</CardTitle>
+                            <CardDescription>
+                                Here you will configure the sentence that you want to add to the exercise.
+                            </CardDescription>
                         </CardHeader>
-
-
                         <CardContent className="space-y-4">
+                            {/* Campo original_sentence */}
                             <div>
                                 <label className="block text-sm font-medium">Complete sentence</label>
                                 <Input
                                     type="text"
-                                    {...register(`sentences.${index}.original_sentence`)}
+                                    {...register(`sentences.${selectedSentenceIndex}.original_sentence`)}
                                     className="w-full p-2 border rounded"
-                                    onKeyDown={(e) => handleGrammarCommands(e, `sentences.${index}.original_sentence`, setValue)}
+                                    onKeyDown={(e) =>
+                                        handleGrammarCommands(
+                                            e,
+                                            `sentences.${selectedSentenceIndex}.original_sentence`,
+                                            setValue
+                                        )
+                                    }
                                 />
-
-                                {formState.errors.sentences?.[index]?.original_sentence && (
+                                <div className="text-xs text-muted-foreground mt-2">
+                                    This is how the sentence will look in the correct form.
+                                </div>
+                                {formState.errors.sentences?.[selectedSentenceIndex]?.original_sentence && (
                                     <span className="text-destructive text-sm">
-                                        {formState.errors.sentences[index]?.original_sentence?.message || "Invalid sentence"}
+                                        {formState.errors.sentences[selectedSentenceIndex]?.original_sentence?.message}
                                     </span>
                                 )}
                             </div>
 
-
+                            {/* Campo sentence_to_show */}
                             <div>
                                 <label className="block text-sm font-medium">Sentence to show</label>
-
-                                <div >
-                                    <Input
-                                        type="text"
-                                        {...register(`sentences.${index}.sentence_to_show`)}
-                                        className="w-full p-2 border rounded"
-                                        onChange={(e) => handleAutoCompleteParentheses(e, index)}
-                                        onKeyDown={(e) => {
-                                            handleKeyDown(e, index)
-                                            handleGrammarCommands(e, `sentences.${index}.sentence_to_show`, setValue)
-                                        }} // Detecta Ctrl + B
-
-                                    />
-
-
-                                    <span className="text-xs text-muted-foreground">
-                                        Press{" "}
-                                        <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
-                                            <span className="text-xs">⌘</span>B
-                                        </kbd>
-                                        {" "}
-                                        for add a blank space to input.
-                                    </span>
+                                <Input
+                                    type="text"
+                                    {...register(`sentences.${selectedSentenceIndex}.sentence_to_show`)}
+                                    className="w-full p-2 border rounded"
+                                    onChange={(e) => {
+                                        handleAutoCompleteParentheses(e, selectedSentenceIndex);
+                                    }}
+                                    onKeyDown={(e) => {
+                                        handleGrammarCommands(
+                                            e,
+                                            `sentences.${selectedSentenceIndex}.sentence_to_show`,
+                                            setValue
+                                        );
+                                        handleKeyDown(e, selectedSentenceIndex);
+                                    }}
+                                />
+                                <div className="text-xs text-muted-foreground mt-2">
+                                    Press{" "}
+                                    <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
+                                        <span className="text-xs">⌘</span>B
+                                    </kbd>{" "}
+                                    to add a blank space to input.
                                 </div>
-
-                                {formState.errors.sentences?.[index]?.sentence_to_show && (
+                                {formState.errors.sentences?.[selectedSentenceIndex]?.sentence_to_show && (
                                     <span className="text-destructive text-sm">
-                                        {formState.errors.sentences[index]?.sentence_to_show?.message || "Invalid sentence"}
+                                        {formState.errors.sentences[selectedSentenceIndex]?.sentence_to_show?.message ||
+                                            "Invalid sentence"}
                                     </span>
                                 )}
                             </div>
 
-
-
-
-                        </CardContent>
-
-
-                        <CardFooter>
+                            {/* Respuestas */}
                             <div className="space-y-2">
                                 <h3 className="text-sm font-bold">Answers</h3>
-                                {sentence.answers.map((_answer: string, answerIndex: number) => (
+                                {currentSentence.answers?.map((_answer: string, answerIndex: number) => (
                                     <div key={answerIndex} className="flex items-center gap-2">
                                         <Input
                                             type="text"
                                             {...register(
-                                                `sentences.${index}.answers.${answerIndex}`
+                                                `sentences.${selectedSentenceIndex}.answers.${answerIndex}`
                                             )}
-
-
-                                            onKeyDown={(e) => handleGrammarCommands(e, `sentences.${index}.answers.${answerIndex}`, setValue)}
-                                            placeholder={`Answer ${answerIndex + 1}`}
                                             className="flex-1 p-2 border rounded"
+                                            onKeyDown={(e) =>
+                                                handleGrammarCommands(
+                                                    e,
+                                                    `sentences.${selectedSentenceIndex}.answers.${answerIndex}`,
+                                                    setValue
+                                                )
+                                            }
                                         />
                                         <Button
                                             type="button"
                                             variant="destructive"
                                             size="icon"
-                                            onClick={() => removeAnswer(index, answerIndex)}
-
+                                            onClick={() =>
+                                                setValue(
+                                                    `sentences.${selectedSentenceIndex}.answers`,
+                                                    currentSentence.answers.filter((_, i) => i !== answerIndex)
+                                                )
+                                            }
                                         >
-                                            <TrashIcon className="h-5 w-5" />
+                                            <Cross1Icon />
                                         </Button>
                                     </div>
                                 ))}
                                 <Button
                                     variant="secondary"
-                                    type="button"
-                                    onClick={() => addAnswer(index)}
-                                    className="mt-2 border"
+                                    onClick={() =>
+                                        setValue(`sentences.${selectedSentenceIndex}.answers`, [
+                                            ...(currentSentence.answers || []),
+                                            "",
+                                        ])
+                                    }
                                 >
                                     Add answer
                                 </Button>
-
-
                             </div>
+                        </CardContent>
+
+                        <CardFooter>
+                            <Button type="button" className="w-full" onClick={addSentence}>
+                                Add Sentence
+                            </Button>
                         </CardFooter>
-
-
-
-
-
                     </Card>
-                ))}
+
+                }
+
+
+                {/* Lista de sentencias */}
+                <div className="space-y-2">
+                    {sentences.map((_, index) => (
+                        <SentenceCardForm
+                            key={index}
+                            index={index}
+
+                        />
+                    ))}
+                </div>
             </div>
 
+            
 
-            <Button type="button" onClick={addSentence}>
-                Add Sentence
-            </Button>
         </div>
     );
 }
