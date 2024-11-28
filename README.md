@@ -1,52 +1,88 @@
-# phrasely-react
+# Phrasely
 
-Web app for making educational english games
+## Description
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> **Phrasely** it's a Open Source educational english games creator made by `@eehcx`, `@mAbimael700` and `@Peter2k3` students of **Polytechnic University of the Center.**
 
-Currently, two official plugins are available:
+### Hooks usage
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+At this moment are avialable hooks for registered questions, teachers, and guest: `useQuestion` and `useUser`
 
-## Expanding the ESLint configuration
+#### Usage example
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+```typescript
+import { useUser } from '../hooks/useUser';
 
-- Configure the top-level `parserOptions` property like this:
+const AddTeacher: React.FC = () => {
+  const { registerNewTeacher } = useUser();
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+  const handleRegisterTeacher = () => {
+    registerNewTeacher({ id: '1', displayName: 'John Doe', email: 'john.doe@example.com' });
+  };
+
+  return <button onClick={handleRegisterTeacher}>Register Teacher</button>;
+};
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### Redux toolkit usage
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+If you want to show the information saved in the local storage, you ony need to call the `useAppSelector` hook in your component.
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+```typescript
+import { useAppSelector } from '../redux/reduxHooks';
+
+const TeacherInfo: React.FC = () => {
+  const teacher = useAppSelector((state) => state.user.teacher);
+
+  if (!teacher) {
+    return <p>No teacher registered</p>;
+  }
+
+  return (
+    <>
+      <p>{teacher.displayName}</p>
+      <p>{teacher.email}</p>
+    </>
+  );
+};
 ```
+
+> In the same way your should to query all the `slices` in the app.
+
+#### Import redux hook
+
+You only import the **useAppSelector** from `/redux/reduxHooks.ts` directory
+
+```typescript
+import { useAppSelector } from '../redux/reduxHooks';
+```
+
+#### Initialize AppSelector
+
+- **slice**: represent any slice in redux like `question` or `user` slices.
+- **interface**: represent an interface assigned for the slice like `teacher`, `guests`, `questions` or `current`.
+
+```typescript
+const interface = useAppSelector((state) => state.slice.interface);
+```
+
+#### Show the content
+
+You only need to call the const where do you keep the information of the AppSelector.
+
+```typescript
+const ShowInfo: React.FC = () => {
+  return (
+    <>
+      <p>{interface.content}</p>
+    </>
+  );
+};
+```
+
+*For more information about the content of the slices query **./src/types/***
+
+![Diagram of phrasely](./docs/assets/diagram.png)
+*Workflow of **pharasely** webapp*
+
+Para más detalles, sobre la configuración de vite [Consulta aquí](./docs/setup.md).
