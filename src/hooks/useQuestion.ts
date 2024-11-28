@@ -1,5 +1,5 @@
 import { useAppDispatch } from '@/redux/reduxHooks';
-import { addQuestion, removeQuestion, addTopic } from '@/redux/slices/questionSlice';
+import { addQuestion, removeQuestion, addTopic, reset } from '@/redux/slices/questionSlice';
 import { Question, QuestionState } from '@/types/questionType';
 
 export const useQuestion = () => {
@@ -17,9 +17,14 @@ export const useQuestion = () => {
         dispatch(removeQuestion(index));
     };
 
+    const handleResetQuestions = () => {
+        dispatch(reset());
+    }
+
     return {
         registerTopicSentence,
         handleNewQuestion,
-        deleteSentence
+        deleteSentence,
+        handleResetQuestions
     };
 };

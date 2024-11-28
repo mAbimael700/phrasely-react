@@ -1,5 +1,5 @@
 import { useAppDispatch } from '@/redux/reduxHooks';
-import { addSentence, addTopic, removeSentence} from '@/redux/slices/sentenceSlice';
+import { addSentence, addTopic, removeSentence, reset } from '@/redux/slices/sentenceSlice';
 import { Sentence, SentenceState } from '@/types/sentenceType';
 
 export const useSentence = () => {
@@ -17,9 +17,14 @@ export const useSentence = () => {
         dispatch(removeSentence(index));
     };
 
+    const handleResetSentences = () => {
+        dispatch(reset());
+    }
+
     return {
         registerNewSentence,
         deleteSentence,
-        registerTopicSentence
+        registerTopicSentence,
+        handleResetSentences
     };
 };
