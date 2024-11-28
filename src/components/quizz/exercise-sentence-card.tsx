@@ -40,7 +40,7 @@ export const ExerciseSentenceCard = ({ title, guest, label, answers, onAnswerSel
 
                 <div className="flex items-center w-full justify-center gap-6 py-10">
                     {answers.map((item, idx) => {
-                        let buttonClass = "w-28 bg-[#594668] hover:bg-[#AA85C6] rounded-2xl text-white";
+                        let buttonClass = "min-w-28 bg-[#594668] hover:bg-[#AA85C6] rounded-2xl text-white";
                         if (selectedAnswer !== null) {
                             if (selectedAnswer === idx && isCorrect) {
                                 buttonClass = "w-28 bg-green-500 rounded-2xl text-white";  
