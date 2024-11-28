@@ -8,10 +8,26 @@ import { IoOpenOutline } from "react-icons/io5";
 import { useAppSelector } from "@/redux/reduxHooks";
 import { Link, useNavigate } from 'react-router-dom';
 
+interface Game {
+    title: string;
+    tags: string[];
+    image: string;
+    url: string;
+    type: 'translation' | 'sentence' | 'question';
+}
+
+const games: Game[] =[
+    { title: 'Translation Challenge', tags: ['Funny', 'Translator'] , image: Glass, url: '/translation-challenge/play', type: 'translation' },
+    { title: 'WordWise', tags: ['Practice', 'Knowledge'] , image: Foodies, url: '/question/play', type: 'question' },
+    { title: 'Sece-Sentences', tags: ['Trivia', 'Skills', 'Fun'] , image: Cube, url: '/sentence/play',  type: 'sentence' },
+    
+];
+
 interface GameCardProps {
     title: string;
     tags: string[]; 
     image: string;
+    onClick: () => void;
 }
 
 const ConsoleHeader = () => {
@@ -19,7 +35,7 @@ const ConsoleHeader = () => {
     return (
         <>
             <header>
-                <div className="mx-auto max-w-screen-xl px-2 py-8 sm:px-6 sm:py-12 lg:px-4">
+                <div className="mx-auto max-w-screen-xl py-8 sm:px-6 sm:py-12 lg:px-4">
                     <div className="flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between">
                         <div>
                             <h1 className="text-2xl font-bold text-orange-200 sm:text-3xl">Welcome, {teacher?.displayName}</h1>
@@ -48,27 +64,26 @@ const ConsoleHeader = () => {
     )
 }
 
-const GameCard: React.FC<GameCardProps> = ({ title, tags, image }) => {
+const GameCard: React.FC<GameCardProps> = ({ title, tags, image, onClick }) => {
     return (
         <article
-            className={`hover:animate-background rounded-xl bg-gradient-to-r from-orange-300 via-orange-400 to-orange-500 p-1 shadow-xl transition hover:bg-[length:400%_400%] hover:shadow-sm hover:[animation-duration:_4s]`}
+            onClick={onClick}
+            className={`hover:animate-background rounded-xl cursor-pointer bg-gradient-to-r from-orange-300 via-orange-400 to-orange-500 p-1 shadow-xl transition hover:bg-[length:400%_400%] hover:shadow-sm hover:[animation-duration:_4s]`}
         >
             <div
                 className="relative rounded-[10px] bg-cover bg-center p-4 sm:p-6"
                 style={{ backgroundImage: `url(${image})`, height: '250px' }}
             >
-                <div className="absolute inset-0 bg-orange-100 bg-opacity-50"></div>
+                <div className="absolute inset-0 bg-orange-100 bg-opacity-60"></div>
                 
                 <div className="relative z-10 flex flex-col justify-center h-full">
-                    <a href="#">
-                        <h3 className="mt-0.5 text-2xl font-medium text-orange-900">{title}</h3>
-                    </a>
+                    <h3 className="mt-0.5 text-2xl font-medium text-orange-900">{title}</h3>
 
                     <div className="mt-4 flex flex-wrap gap-1">
                         {tags.map((tag, idx) => (
                             <span
                                 key={idx}
-                                className={`whitespace-nowrap rounded-full bg-orange-100 px-2.5 py-0.5 text-xs text-orange-600`}
+                                className={`whitespace-nowrap rounded-full border border-orange-200 bg-orange-100 px-2.5 py-0.5 text-xs text-orange-600 pointer-events-none select-none`}
                             >
                                 {tag}
                             </span>
@@ -82,12 +97,38 @@ const GameCard: React.FC<GameCardProps> = ({ title, tags, image }) => {
 
 export const GameConsole = () => {
     const teacher = useAppSelector((state) => state.user.teacher);
+    const questions = useAppSelector((state)=> state.question.questions);
+    const sentences = useAppSelector((state)=> state.sentence.sentences);
+    
     const navigate = useNavigate();
+
     const navs = [
         { href: '/', name: 'Home' },
         { href: '/docs', name: 'Docs' },
         { href: '/console', name: 'Console' }
     ];
+
+    const handleNavigation = (game: Game) => {
+        let hasData: boolean = false;
+
+        switch (game.type) {
+            case 'translation':
+            case 'question':
+                hasData = questions.length > 0;
+                break;
+            case 'sentence':
+                hasData = sentences.length > 0;
+                break;
+            default:
+                hasData = false;
+        }
+
+        if (hasData) {
+            navigate(game.url);
+        } else {
+            navigate(`/${game.type}/add`);
+        }
+    };
 
     useEffect(() => {
         if (!teacher || teacher.displayName === '') {
@@ -101,22 +142,16 @@ export const GameConsole = () => {
             style={{ backgroundImage: `url(${Background})` }}
         >
             <ConsoleHeader />
-            <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-8">
-                <GameCard 
-                    title="Translation Challenge"
-                    tags={['Funny', 'Translator']}
-                    image={Glass}
-                />
-                <GameCard 
-                    title="WordWise"
-                    tags={['Trivia', 'Skills', 'Fun']}
-                    image={Foodies}
-                />
-                <GameCard 
-                    title="Sece-Sentences"
-                    tags={['Practice', 'Knowledge']}
-                    image={Cube}
-                />
+            <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-8 2xl:mb-44">
+                {games.map((item, idx)=>(
+                    <GameCard 
+                        key={idx}
+                        title={item.title}
+                        tags={item.tags}
+                        image={item.image}
+                        onClick={() => handleNavigation(item)}
+                    />
+                ))}
             </div>
             <Footer data={navs} />
         </div>

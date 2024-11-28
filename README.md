@@ -21,11 +21,7 @@ const AddTeacher: React.FC = () => {
   };
 
   return <button onClick={handleRegisterTeacher}>Register Teacher</button>;
-<<<<<<< HEAD
 };
-=======
-};z
->>>>>>> 2a46e05d0d7107cbdea6fdebe0e72a1cc5a4b267
 ```
 
 ### Redux toolkit usage
