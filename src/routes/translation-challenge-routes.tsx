@@ -10,7 +10,7 @@ const translationChallengeRoutes: RouteObject[] = [
     Component: TranslationChallenge,
   },
   {
-    path: "/translation-challenge/add-question",
+    path: "/translation-challenge/add",
     element: <AddQuestion />,
   },
   {

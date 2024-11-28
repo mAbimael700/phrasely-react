@@ -3,21 +3,22 @@ import Glass from "@/assets/happy_people.png"
 import Foodies from "@/assets/foodies.jpg"
 import Cube from "@/assets/cube.jpg"
 import Background from "@/assets/room.jpg";
-import { Footer } from "@/components/home/footer"
-import { IoOpenOutline } from "react-icons/io5";
+//import { Footer } from "@/components/home/footer"
+import { IoOpenOutline, IoExitOutline } from "react-icons/io5";
 import { useAppSelector } from "@/redux/reduxHooks";
 import { Link, useNavigate } from 'react-router-dom';
+import { useUser } from '@/hooks/useUser';
 
 interface Game {
     title: string;
     tags: string[];
     image: string;
     url: string;
-    type: 'translation' | 'sentence' | 'question';
+    type: 'translation-challenge' | 'sentence' | 'question';
 }
 
 const games: Game[] =[
-    { title: 'Translation Challenge', tags: ['Funny', 'Translator'] , image: Glass, url: '/translation-challenge/play', type: 'translation' },
+    { title: 'Translation Challenge', tags: ['Funny', 'Translator'] , image: Glass, url: '/translation-challenge/play', type: 'translation-challenge' },
     { title: 'WordWise', tags: ['Practice', 'Knowledge'] , image: Foodies, url: '/question/play', type: 'question' },
     { title: 'Sece-Sentences', tags: ['Trivia', 'Skills', 'Fun'] , image: Cube, url: '/sentence/play',  type: 'sentence' },
     
@@ -32,13 +33,29 @@ interface GameCardProps {
 
 const ConsoleHeader = () => {
     const teacher = useAppSelector((state) => state.user.teacher);
+    const { Logout } = useUser();
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        Logout();
+
+        navigate("/")
+    }
     return (
         <>
             <header>
-                <div className="mx-auto max-w-screen-xl py-8 sm:px-6 sm:py-12 lg:px-4">
+                <div className="max-w-screen-xl py-8 sm:px-6 sm:py-12 lg:px-4">
                     <div className="flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between">
                         <div>
-                            <h1 className="text-2xl font-bold text-orange-200 sm:text-3xl">Welcome, {teacher?.displayName}</h1>
+                            <div className='flex flex-row items-center'>
+                                <h1 className="text-2xl font-bold text-orange-200 sm:text-3xl">Welcome, {teacher?.displayName}</h1>
+                                <button 
+                                    className='mx-2'
+                                    onClick={handleLogout}
+                                >
+                                    <IoExitOutline color='#FED7AA' size={28}/>
+                                </button>
+                            </div>
 
                             <p className="mt-1.5 text-base max-w-96 text-slate-100">
                             Phrasely Games, it's an application to create educational games in English, add game content on topics you want to teach your class.
@@ -97,22 +114,30 @@ const GameCard: React.FC<GameCardProps> = ({ title, tags, image, onClick }) => {
 
 export const GameConsole = () => {
     const teacher = useAppSelector((state) => state.user.teacher);
+    const guests = useAppSelector((state)=> state.user.guests)
     const questions = useAppSelector((state)=> state.question.questions);
     const sentences = useAppSelector((state)=> state.sentence.sentences);
+
+    const { Logout } = useUser();
     
     const navigate = useNavigate();
 
-    const navs = [
-        { href: '/', name: 'Home' },
-        { href: '/docs', name: 'Docs' },
-        { href: '/console', name: 'Console' }
-    ];
+    //const navs = [
+    //    { href: '/', name: 'Home' },
+    //    { href: '/docs', name: 'Docs' },
+    //    { href: '/console', name: 'Console' }
+    //];
 
     const handleNavigation = (game: Game) => {
+        if (guests.length === 0) {
+            navigate('/console/guest/add');
+            return; // Sale de la función si no hay guest
+        }
+
         let hasData: boolean = false;
 
         switch (game.type) {
-            case 'translation':
+            case 'translation-challenge':
             case 'question':
                 hasData = questions.length > 0;
                 break;
@@ -121,7 +146,7 @@ export const GameConsole = () => {
                 break;
             default:
                 hasData = false;
-        }
+        } ///console/guest/add
 
         if (hasData) {
             navigate(game.url);
@@ -131,9 +156,7 @@ export const GameConsole = () => {
     };
 
     useEffect(() => {
-        if (!teacher || teacher.displayName === '') {
-            navigate('/auth/signup');
-        }
+        !teacher || teacher.displayName === '' ? navigate('/auth/signup') : null;
     }, [teacher, navigate]); 
 
     return (
@@ -153,7 +176,7 @@ export const GameConsole = () => {
                     />
                 ))}
             </div>
-            <Footer data={navs} />
+            {/*<Footer data={navs} /> */}
         </div>
     );
 };

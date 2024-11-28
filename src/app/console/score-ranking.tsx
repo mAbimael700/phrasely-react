@@ -8,7 +8,7 @@ const ConsoleHeader = () => {
     return (
         <>
             <header>
-                <div className="mx-auto max-w-screen-xl px-2 py-8 sm:px-6 sm:py-12 lg:px-4">
+                <div className=" max-w-screen-xl px-2 py-8 sm:px-6 sm:py-12 lg:px-4">
                     <div className="flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between">
                         <div>
                             <h1 className="text-2xl font-bold text-orange-200 sm:text-3xl">Ranking</h1>
@@ -49,7 +49,7 @@ export const ScoreRanking = () => {
             {guests.length === 0 ? (
                 <div className="flex items-center">
                     <IoPeople size={30} color="#fed7aa"/>
-                    <p className="mx-3 font-montserrat font-semibold text-3xl text-orange-200">
+                    <p className="mx-4 font-montserrat font-semibold text-3xl text-orange-200">
                         No hay registros
                     </p>
                 </div>

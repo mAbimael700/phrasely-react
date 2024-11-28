@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { TextInput } from "@/components/auth/text-input"
-import { IoCloseSharp } from "react-icons/io5";
+import { IoCloseSharp } from "react-icons/io5"; //IoArrowForwardOutline
 import { useUser } from "@/hooks/useUser";
 import { useNavigate } from 'react-router-dom';
 
@@ -97,9 +97,9 @@ export const SignupTeacher = () => {
 
             <div className="flex justify-between">
                 <button
-                onClick={handleContinue}
-                className="flex items-center justify-center rounded-xl bg-orange-800 border border-orange-700 px-4 py-2 text-sm font-semibold text-gray-100 shadow-lg hover:bg-orange-700 ml-auto"
-                type="button"
+                    onClick={handleContinue}
+                    className="flex items-center justify-center rounded-xl bg-orange-800 border border-orange-700 px-4 py-2 text-sm font-semibold text-gray-100 shadow-lg hover:bg-orange-700 ml-auto"
+                    type="button"
                 >
                 <span className="text-xl font-medium mr-1">{isLoading ? 'Saving...' : step === 1 ? 'Next' : 'Registrar'}</span>
                 </button>

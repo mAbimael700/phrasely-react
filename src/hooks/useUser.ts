@@ -1,5 +1,5 @@
 import { useAppDispatch } from '../redux/reduxHooks';
-import { registerTeacher, registerGuest, removeGuest } from '../redux/slices/userSlice';
+import { registerTeacher, registerGuest, removeGuest, resetUser } from '../redux/slices/userSlice';
 import { Teacher, Guest } from '../types/userType';
 
 export const useUser = () => {
@@ -17,9 +17,14 @@ export const useUser = () => {
         dispatch(removeGuest(id));
     };
 
+    const Logout = () => {
+        dispatch(resetUser());
+    }
+
     return {
         registerNewTeacher,
         registerNewGuest,
-        deleteGuest
+        deleteGuest,
+        Logout
     };
 };
