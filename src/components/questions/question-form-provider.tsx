@@ -5,7 +5,7 @@ import { useQuestion } from "@/hooks/useQuestion";
 import { FormProvider, useForm } from "react-hook-form";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { z } from "zod"
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { useQuestionSelection } from "@/contexts/question-form-context";
 import React from "react";
 import { Question } from "@/types/questionType";
