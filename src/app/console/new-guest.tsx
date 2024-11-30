@@ -17,7 +17,7 @@ export const GuestSession = () => {
 
     //const [Guest, setGuest] = useState<GuestInfo[]>([]); 
     const [inputValue, setInputValue] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
+    //const [isLoading, setIsLoading] = useState(false);
     const [isInvalid, setIsInvalid] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
@@ -35,7 +35,7 @@ export const GuestSession = () => {
         }
 
         try {
-            setIsLoading(true);
+            //setIsLoading(true);
             registerNewGuest({ id: `${guests.length + 1}`, displayName, score });
             //setGuest((prevGuests) => [...prevGuests, { displayName, score }]);
 
@@ -46,9 +46,9 @@ export const GuestSession = () => {
         } catch (error) {
             console.error(error);
             setErrorMessage('Error al registrar el invitado.');
-        } finally {
-            setIsLoading(false);
-        }
+        } //finally {
+            //setIsLoading(false);
+        //}
     };
 
     useEffect(() => {

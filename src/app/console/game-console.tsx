@@ -117,8 +117,6 @@ export const GameConsole = () => {
     const guests = useAppSelector((state)=> state.user.guests)
     const questions = useAppSelector((state)=> state.question.questions);
     const sentences = useAppSelector((state)=> state.sentence.sentences);
-
-    const { Logout } = useUser();
     
     const navigate = useNavigate();
 
